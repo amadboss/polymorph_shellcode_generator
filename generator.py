@@ -15,8 +15,12 @@ shellcode = ""
 
 
 def xor (registre, shellcode):		
+<<<<<<< HEAD
 	
 	# Tableau contenant les instructions xor avec différents registres		
+=======
+		
+>>>>>>> 7b5b9a1d1c4749d5f1fd92c88ba9eba9473bae1e
 	xor_rax = ['4831c0', '4829c0', '4d31e44994', '4d31e4415458'] #xor rax, rax // sub rax, rax // xor  r12, r12 | xchg rax, r12 // xor  r12, r12 | push r12 | pop  rax
 	xor_rbx = ['4831db', '4829DB', '4d31e44c87e3', '4d31e441545b']
 	xor_rcx = ['4831c9', '4829C9', '4d31e44c87e1', '4d31e4415459']
@@ -24,7 +28,6 @@ def xor (registre, shellcode):
 	xor_rdi = ['4831FF', '4829FF', '4d31e44c87e7', '4d31e441545f']
 	xor_rsi = ['4831F6', '4829F6', '4d31e44c87e6', '4d31e441545e']
 
-	# Sélectionne une instruction xor aléatoire en fonction du registre demandé
 	if registre == "rax":
 		shellcode += xor_rax[random.randint(0, 3)]
 	if registre == "rbx":
@@ -40,8 +43,11 @@ def xor (registre, shellcode):
 
 	return shellcode
 
+<<<<<<< HEAD
 
 # Fonction qui renvoie la valeur hexadécimale pour les instructions mov en fonction du registre
+=======
+>>>>>>> 7b5b9a1d1c4749d5f1fd92c88ba9eba9473bae1e
 def mov_hex(register) :
 
 	if register == 'al':
@@ -51,7 +57,6 @@ def mov_hex(register) :
 	if register == 'dl':
 		return 'b2'
 	
-# Fonction qui renvoie la valeur hexadécimale pour les instructions add en fonction du registre
 def add_hex(register) :
 			
 	if register == 'al':
@@ -60,8 +65,12 @@ def add_hex(register) :
 		return '80c3'
 	if register == 'dl':
 		return '80c2'
+<<<<<<< HEAD
 
 # Fonction qui renvoie la valeur hexadécimale pour les instructions sub en fonction du registre		
+=======
+		
+>>>>>>> 7b5b9a1d1c4749d5f1fd92c88ba9eba9473bae1e
 def sub_hex(register) :
 	
 	if register == 'al':
