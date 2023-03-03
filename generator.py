@@ -48,6 +48,8 @@ def add_hex(register) :
 	if register == 'dl':
 		return '80c2'
 		
+
+# Fonction qui renvoie la valeur hexadécimale pour les instructions sub en fonction du registre		
 def sub_hex(register) :
 	
 	if register == 'al':
@@ -56,7 +58,8 @@ def sub_hex(register) :
 		return '80eb'
 	if register == 'dl':
 		return '80ea'
-		
+
+# Fonction qui renvoie la valeur hexadécimale pour l'instruction pop en fonction du registre	
 def pop(register) :
 	
 	if register == 'al':
