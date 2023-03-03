@@ -5,6 +5,6 @@ Script python qui génère un shellcode polymorphique et prend en argument une I
 ### Usage
 
 1. Pour utiliser ce script, le lancer comme suit :
-   ```sh
-  python3 generator.py -ip 192.168.1.2 -p 8989
+   ```python
+   python3 generator.py -ip 192.168.1.2 -p 8989
    ```
